@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Passenger Home</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      width: 90%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    form label,
+    form input,
+    form select {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    form button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #0077cc;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #005fa3;
+    }
+
+    #driverList {
+      margin-top: 20px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .driver-item {
+      padding: 10px;
+      background-color: #1c1c1c;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Passenger Home</h1>
+
+  <form id="priorityForm">
+    <label for="priorities">Select Priorities:</label>
+    <select id="priorities" multiple>
+      <option value="musicTastes">Music Tastes</option>
+      <option value="gender">Gender</option>
+      <option value="distance">Distance</option>
+    </select>
+
+    <button type="submit">Search Drivers</button>
+  </form>
+
+  <div id="driverList"></div>
+
+  <script>
+    const token = sessionStorage.getItem('token');
+
+    document.getElementById('priorityForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const priorities = Array.from(document.getElementById('priorities').selectedOptions).map(option => option.value);
+
+      fetch('http://localhost:3000/api/passengers/drivers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ priorities })
+      })
+        .then(response => response.json())
+        .then(drivers => {
+          const driverList = document.getElementById('driverList');
+          driverList.innerHTML = '';
+
+          drivers.forEach(driverData => {
+            const driverItem = document.createElement('div');
+            driverItem.classList.add('driver-item');
+
+            const driverInfo = `
+              <p>Name: ${driverData.driver.name}</p>
+              <p>Major: ${driverData.driver.major}</p>
+              <p>Time Matches: ${driverData.timeMatches}</p>
+              <p>Distance: ${driverData.distance.toFixed(2)} km</p>
+              <p>Similarity Score: ${driverData.similarityScore.toFixed(2)}</p>
+            `;
+
+            driverItem.innerHTML = driverInfo;
+            driverList.appendChild(driverItem);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching drivers:', error);
+        });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Carpooling App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #212121;
+      color: #fff;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    .link-box {
+      display: block;
+      width: 200px;
+      padding: 10px;
+      margin: 10px;
+      border: 2px solid #fff;
+      border-radius: 5px;
+      text-align: center;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    
+    .link-box:hover,
+    .link-box:focus {
+      background-color: #333;
+      border-color: #fff;
+    }
+    
+    .link-box a {
+      color: #fff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Carpooling App</h1>
+  <a class="link-box" href="driver-signup.html">Sign up as a Driver</a>
+  <a class="link-box" href="driver-login.html">Login as a Driver</a>
+  <a class="link-box" href="passenger-signup.html">Sign up as a Passenger</a>
+  <a class="link-box" href="passenger-login.html">Login as a Passenger</a>
+</body>
+</html>
