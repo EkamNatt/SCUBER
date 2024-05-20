@@ -253,10 +253,86 @@ app.post('/api/passengers/drivers', verifyToken, (req, res) => {
       });
   });
   
-  // ... (remaining code remains the same) ...
+app.post('/api/drivers/passengers', verifyToken, (req, res) => {
+    const { priorities } = req.body;
+  
+    if (req.userType !== 'driver') {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+  
+    Driver.findByPk(req.userId)
+      .then(driver => {
+        if (!driver) {
+          return res.status(404).json({ error: 'Driver not found' });
+        }
+  
+        Passenger.findAll()
+          .then(passengers => {
+            const sortedPassengers = passengers.map(passenger => {
+              let score = 0;
+              let timeMatches = 0;
+  
+              // Calculate time matches
+              const passengerSchedule = [
+                passenger.scheduleMonday,
+                passenger.scheduleTuesday,
+                passenger.scheduleWednesday,
+                passenger.scheduleThursday,
+                passenger.scheduleFriday
+              ];
+              const driverSchedule = [
+                driver.scheduleMonday,
+                driver.scheduleTuesday,
+                driver.scheduleWednesday,
+                driver.scheduleThursday,
+                driver.scheduleFriday
+              ];
+              timeMatches = passengerSchedule.filter((time, index) => time === driverSchedule[index]).length;
+  
+              // Calculate scores based on priorities
+              priorities.forEach(priority => {
+                if (priority === 'musicTastes') {
+                  const musicMatch = driver.musicTastes.some(genre => passenger.musicTastes.includes(genre));
+                  score += musicMatch ? 1 : 0;
+                } else if (priority === 'gender') {
+                  score += driver.genderPreference === 'All' || driver.gender === passenger.gender ? 1 : 0;
+                } else if (priority === 'distance') {
+                  const distance = calculateDistance(driver.homeLatitude, driver.homeLongitude, passenger.homeLatitude, passenger.homeLongitude);
+                  score += 1 / (distance + 1);
+                }
+              });
+  
+              const totalPriorities = priorities.length + 1; // +1 for time matches
+              const similarityScore = (score + timeMatches) / totalPriorities;
+  
+              return {
+                passenger,
+                score,
+                timeMatches,
+                distance: calculateDistance(driver.homeLatitude, driver.homeLongitude, passenger.homeLatitude, passenger.homeLongitude),
+                similarityScore
+              };
+            });
+  
+            // Sort passengers based on similarity score in descending order
+            sortedPassengers.sort((a, b) => b.similarityScore - a.similarityScore);
+  
+            res.json(sortedPassengers);
+          })
+          .catch(error => {
+            console.error('Error fetching passengers:', error);
+            res.status(500).json({ error: 'Internal server error' });
+          });
+      })
+      .catch(error => {
+        console.error('Error fetching driver:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      });
+});
+  
   
 
-  app.post('/api/driver-login', (req, res) => {
+app.post('/api/driver-login', (req, res) => {
     const { username, password } = req.body;
   
     Driver.findOne({ where: { username, password } })
@@ -273,7 +349,7 @@ app.post('/api/passengers/drivers', verifyToken, (req, res) => {
         console.error('Login error:', error);
         res.status(500).json({ error: 'Internal server error' });
       });
-  });
+});
   
 
 // Start the server
