@@ -90,30 +90,30 @@
         },
         body: JSON.stringify({ priorities })
       })
-        .then(response => response.json())
-        .then(drivers => {
-          const driverList = document.getElementById('driverList');
-          driverList.innerHTML = '';
+      .then(response => response.json())
+      .then(drivers => {
+        const driverList = document.getElementById('driverList');
+        driverList.innerHTML = '';
 
-          drivers.forEach(driverData => {
-            const driverItem = document.createElement('div');
-            driverItem.classList.add('driver-item');
+        drivers.forEach(driverData => {
+          const driverItem = document.createElement('div');
+          driverItem.classList.add('driver-item');
 
-            const driverInfo = `
-              <p>Name: ${driverData.driver.name}</p>
-              <p>Major: ${driverData.driver.major}</p>
-              <p>Time Matches: ${driverData.timeMatches}</p>
-              <p>Distance: ${driverData.distance.toFixed(2)} km</p>
-              <p>Similarity Score: ${driverData.similarityScore.toFixed(2)}</p>
-            `;
+          const driverInfo = `
+            <p>Name: ${driverData.driver.name}</p>
+            <p>Major: ${driverData.driver.major}</p>
+            <p>Time Matches: ${driverData.timeMatches}</p>
+            <p>Distance: ${driverData.distance.toFixed(2)} km</p>
+            <p>Similarity Score: ${driverData.similarityScore.toFixed(2)}</p>
+          `;
 
-            driverItem.innerHTML = driverInfo;
-            driverList.appendChild(driverItem);
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching drivers:', error);
+          driverItem.innerHTML = driverInfo;
+          driverList.appendChild(driverItem);
         });
+      })
+      .catch(error => {
+        console.error('Error fetching drivers:', error);
+      });
     });
   </script>
 </body>
