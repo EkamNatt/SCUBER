@@ -1,0 +1,84 @@
+/* Customize the label (the custom_checkbox) */
+.custom_checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.custom_checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: -10px;
+    height: 25px;
+    width: 25px;
+    background-color: #e6e6e6;
+}
+
+/* On mouse-over, add a grey background color */
+.custom_checkbox:hover input ~ .checkmark {
+    background-color: #969696;
+}
+
+/* on mouse click down */
+.custom_checkbox:active:hover input ~ .checkmark {
+    translate: 0 5px;
+    transition-duration: 0.5s;
+}
+
+/* When the checkbox is checked, add a blue background */
+.custom_checkbox input:checked ~ .checkmark {
+    background-color: #2196F3;
+    scale: 1.25;
+    transition-duration: 1s;
+}
+.custom_checkbox input:not(:checked) ~ .checkmark {
+    scale: 1;
+    transition-duration: 1s;
+}
+
+/* Create the checkmark / indicator */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: block;
+}
+
+/* Show the checkmark when checked */
+.custom_checkbox input:checked ~ .checkmark:after {
+
+}
+
+/* Style the checkmark/indicator */
+.custom_checkbox .checkmark:before {
+    opacity: 50%;
+}
+.custom_checkbox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    opacity: 100%;
+    transition-duration: 1s;
+}
