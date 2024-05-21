@@ -1,0 +1,18 @@
+[type="submit"] {
+    background-color:#2196F3;
+    color: White;
+    font-weight: bolder;
+    scale: 200%;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+/* input hint */
+[type="text"] {
+    font-size: medium;
+}
+
+/* questions */
+label {
+    font-size: large;
+}
