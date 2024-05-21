@@ -2,7 +2,7 @@
 .custom_checkbox {
     display: block;
     position: relative;
-    padding-left: 35px;
+    padding-left: 50px;
     margin-bottom: 20px;
     cursor: pointer;
     font-size: 18px;
@@ -10,7 +10,10 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    width: auto;
 }
+
+
 
 /* Hide the browser's default checkbox */
 .custom_checkbox input {
@@ -22,39 +25,41 @@
 }
 
 /* Create a custom checkbox */
-.checkmark {
+.custom_checkbox .checkmark {
     position: absolute;
     top: 0;
-    left: -10px;
+    left: 0;
     height: 25px;
     width: 25px;
     background-color: #e6e6e6;
+    border-radius: 5px;
 }
 
 /* On mouse-over, add a grey background color */
 .custom_checkbox:hover input ~ .checkmark {
     background-color: #969696;
+    transition-duration: 0.5s;
 }
 
 /* on mouse click down */
 .custom_checkbox:active:hover input ~ .checkmark {
     translate: 0 5px;
-    transition-duration: 0.5s;
+    transition-duration: 0.01s;
 }
 
 /* When the checkbox is checked, add a blue background */
 .custom_checkbox input:checked ~ .checkmark {
     background-color: #2196F3;
     scale: 1.25;
-    transition-duration: 1s;
+    transition-duration: 0.5s;
 }
 .custom_checkbox input:not(:checked) ~ .checkmark {
     scale: 1;
-    transition-duration: 1s;
+    transition-duration: 0.5s;
 }
 
 /* Create the checkmark / indicator */
-.checkmark:after {
+.custom_checkbox .checkmark:after {
     content: "";
     position: absolute;
     display: block;
@@ -76,9 +81,8 @@
     height: 10px;
     border: solid white;
     border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
     opacity: 100%;
-    transition-duration: 1s;
+    transition-duration: 0.5s;
 }
