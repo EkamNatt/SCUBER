@@ -10,6 +10,7 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    max-inline-size: fit-content;
 }
 
 /* Hide the browser's default radio button */
