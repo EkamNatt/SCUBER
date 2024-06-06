@@ -40,12 +40,16 @@ button {
     font-weight: bolder;
     margin-top: 5%;
     transition-duration: 0.5s;
+    scale: 1.4;
+    width: auto;
+    height: auto;
+    word-wrap: anywhere;
 }
 
 button:hover {
     background-color:#2196F3;
     transition-duration: 0.5s;
-    transform: scale(2);
+    transform: scale(1.5);
     #animation: rainbow_pulse 10s infinite ease-in-out;
 }
 
