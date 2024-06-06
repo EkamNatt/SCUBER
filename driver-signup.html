@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
 	<title>Driver Sign Up</title>
 
@@ -9,11 +9,28 @@
 	<link rel="stylesheet" href="CSS/RadioButton.css">
 	<link rel="stylesheet" href="CSS/Signup.css">
 
-	<script src="JS/Signup.js"> </script>
+
 
 
 
 	<style>
+
+        [type="submit"] {
+            background-color:#2196F3;
+            color: White;
+            font-weight: bolder;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            transform: scale(0.7);
+            transition-duration: 0.5s;
+        }
+        [type="submit"]:hover {
+	        transform: scale(1);
+	        transition-duration: 0.5s;
+        }
+
+
+
     body {
 	    display: flex;
 	    flex-direction: column;
@@ -227,10 +244,16 @@
 		<span class="checkmark"></span>
 	</label>
 
-	<br>
 
-	<button type="submit">Sign Up</button>
+		<button type="submit">Sign Up</button>
+
 	</div>
 </form>
+
+
+
+
+<script src="JS/Signup.js"> </script>
+
 </body>
 </html>

@@ -14,6 +14,20 @@
 
 
   <style>
+    [type="submit"] {
+      background-color:#2196F3;
+      color: White;
+      font-weight: bolder;
+      margin-top: 50px;
+      margin-bottom: 50px;
+      transform: scale(0.7);
+      transition-duration: 0.5s;
+    }
+    [type="submit"]:hover {
+      transform: scale(1);
+      transition-duration: 0.5s;
+    }
+
     body {
       display: flex;
       flex-direction: column;
@@ -226,8 +240,6 @@
       <input type="radio" name="r">
       <span class="checkmark"></span>
     </label>
-
-    <br>
 
     <button type="submit">Sign Up</button>
   </div>
