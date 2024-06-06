@@ -52,6 +52,9 @@ button:hover {
     transform: scale(1.5);
     #animation: rainbow_pulse 10s infinite ease-in-out;
 }
+button:active {
+    transform: translateY(50%);
+}
 
 @keyframes rainbow_pulse {
     0% { background-color: red; transform: scale(1);}
