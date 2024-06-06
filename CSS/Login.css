@@ -1,0 +1,60 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+
+
+.error-message {
+    color: red; /* Red color for the error message */
+}
+
+
+form {
+    width: 90%;
+    margin: 0 auto;
+}
+
+form label,
+form input {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+
+.button_container {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+}
+
+button {
+    background-color:#2196F3;
+    color: White;
+    font-weight: bolder;
+    margin-top: 5%;
+    transition-duration: 0.5s;
+}
+
+button:hover {
+    background-color:#2196F3;
+    transition-duration: 0.5s;
+    transform: scale(2);
+    #animation: rainbow_pulse 10s infinite ease-in-out;
+}
+
+@keyframes rainbow_pulse {
+    0% { background-color: red; transform: scale(1);}
+    16.67% { background-color: orange; }
+    33.33% { background-color: yellow; }
+    50% { background-color: green; transform: scale(2);}
+    66.67% { background-color: blue; }
+    83.33% { background-color: indigo; }
+    100% { background-color: violet; transform: scale(1);}
+}
