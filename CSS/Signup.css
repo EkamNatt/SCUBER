@@ -1,0 +1,14 @@
+/* input hint */
+[type="text"] {
+    font-size: medium;
+}
+
+/* questions */
+label {
+    font-size: large;
+}
+
+body {
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
