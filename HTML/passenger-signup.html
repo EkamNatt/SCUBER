@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <title>Passenger Sign Up</title>
+
+  <!-- Water CSS Light Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+  <link rel="stylesheet" href="../CSS/CheckBox.css">
+  <link rel="stylesheet" href="../CSS/RadioButton.css">
+  <link rel="stylesheet" href="../CSS/Signup.css">
+
+  <script src="../JS/Signup.js"> </script>
+
+
+
+  <style>
+    body {
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+    }
+
+    [type="submit"] {
+      background-color:#2196F3;
+      color: White;
+      font-weight: bolder;
+      margin-top: 50px;
+      margin-bottom: 50px;
+      transform: scale(0.7);
+      transition-duration: 0.5s;
+    }
+    [type="submit"]:hover {
+      transform: scale(1);
+      transition-duration: 0.5s;
+      background-color:#2196F3;
+      color: White;
+    }
+    [type="submit"]:active {
+      transform: translateY(50%);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    form label,
+    form input,
+    form select {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    form button {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .radio-group input[type="radio"],
+    .selector-group select {
+      margin-right: 10px;
+    }
+
+    .autocomplete-container {
+      position: relative;
+    }
+
+    #suggestionsList {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: #202b38;
+      border: 1px solid #3c4858;
+      border-top: none;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      z-index: 1;
+    }
+
+    #suggestionsList li {
+      padding: 10px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    #suggestionsList li:hover {
+      background-color: #3c4858;
+    }
+  </style>
+</head>
+
+
+
+<body>
+<h1>Passenger Sign Up</h1>
+<form id="passengerSignupForm">
+
+  <br>
+
+  <label for="name">Name:</label>
+  <input type="text" id="name" required>
+
+  <br>
+
+  <div class="usernameItem">
+    <label for="username">Username:</label>
+    <input type="text" id="username" placeholder="" required>
+    <span class="error-message"></span>
+  </div>
+
+  <br>
+
+  <div class="passwordItem">
+    <label for="password">Password:</label>
+    <input type="password" id="password" placeholder="Enter 8 or more characters" minlength="8" required>
+    <span class="error-message"></span>
+  </div>
+
+  <div class="confirmPasswordItem">
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" placeholder="" minlength="8" required>
+    <span class="error-message"></span>
+  </div>
+
+  <br>
+
+  <label for="major">Major:</label>
+  <input type="text" id="major" placeholder="Enter the official SCU abbreviation" required>
+
+  <br>
+
+  <div class="phoneNumberItem">
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" placeholder="Enter phone number (e.g., 123-456-7890)" pattern="^\d{3}-\d{3}-\d{4}$" required>
+    <span class="error-message"></span>
+  </div>
+
+  <br>
+
+  <div class="autocomplete-container">
+    <label for="homeLocation">Home Address:</label>
+    <input type="text" id="homeLocation" placeholder="Autocomplete" required>
+    <ul id="suggestionsList"></ul>
+  </div>
+
+  <br>
+  <br>
+
+  <h2>Schedule:</h2>
+  <h4> Note that the final matched time may have up to half an hour difference. </h4>
+
+  <br>
+
+  <div id="scheduleContainer">
+    <div class="scheduleItem">
+      <label for="scheduleMonday"> Monday: </label>
+      <input type="text" id="scheduleMonday" placeholder="Enter pickup time (e.g., 09:00 AM)" pattern="^(0[0-9]|1[0-2]):[0-5][0-9] (AM|PM)$" required>
+      <span class="error-message"></span>
+
+      <br>
+
+      <label for="scheduleTuesday">Tuesday:</label>
+      <input type="text" id="scheduleTuesday" placeholder="Enter pickup time (e.g., 09:00 AM)" pattern="^(0[0-9]|1[0-2]):[0-5][0-9] (AM|PM)$" required>
+      <span class="error-message"></span>
+
+      <br>
+
+      <label for="scheduleWednesday">Wednesday:</label>
+      <input type="text" id="scheduleWednesday" placeholder="Enter pickup time (e.g., 09:00 AM)" pattern="^(0[0-9]|1[0-2]):[0-5][0-9] (AM|PM)$" required>
+      <span class="error-message"></span>
+
+      <br>
+
+      <label for="scheduleThursday">Thursday:</label>
+      <input type="text" id="scheduleThursday" placeholder="Enter pickup time (e.g., 09:00 AM)" pattern="^(0[0-9]|1[0-2]):[0-5][0-9] (AM|PM)$" required>
+      <span class="error-message"></span>
+
+      <br>
+
+      <label for="scheduleFriday">Friday:</label>
+      <input type="text" id="scheduleFriday" placeholder="Enter pickup time (e.g., 09:00 AM)" pattern="^(0[0-9]|1[0-2]):[0-5][0-9] (AM|PM)$" required>
+      <span class="error-message"></span>
+
+    </div>
+
+    <br>
+
+
+
+    <h2>Music Preferences:</h2>
+
+    <br>
+
+    <label class="custom_checkbox"> Classical
+      <input type="checkbox">
+      <span class="checkmark"></span>
+    </label>
+    <label class="custom_checkbox"> Jazz
+      <input type="checkbox">
+      <span class="checkmark"></span>
+    </label>
+    <label class="custom_checkbox"> R & B
+      <input type="checkbox">
+      <span class="checkmark"></span>
+    </label>
+    <label class="custom_checkbox"> Rock
+      <input type="checkbox">
+      <span class="checkmark"></span>
+    </label>
+    <label class="custom_checkbox"> Hip Hop
+      <input type="checkbox">
+      <span class="checkmark"></span>
+    </label>
+    <label class="custom_checkbox"> EDM
+      <input type="checkbox">
+      <span class="checkmark"></span>
+    </label>
+
+    <br>
+
+    <h2> Gender: </h2>
+
+    <br>
+
+    <label class="custom_radiobutton"> Male
+      <input type="radio" name="r" id="male">
+      <span class="checkmark"></span>
+    </label>
+    <label class="custom_radiobutton"> Female
+      <input type="radio" name="r">
+      <span class="checkmark"></span>
+    </label>
+    <label class="custom_radiobutton"> Others
+      <input type="radio" name="r">
+      <span class="checkmark"></span>
+    </label>
+
+    <button type="submit">Sign Up</button>
+  </div>
+</form>
+</body>
+</html>
