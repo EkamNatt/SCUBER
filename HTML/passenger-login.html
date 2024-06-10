@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Passenger Login</title>
+
+  <!-- Water CSS Light Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+  <link rel="stylesheet" href="../CSS/Login.css">
+
+  <style>
+  </style>
+
+</head>
+
+
+
+<body>
+<h1>Passenger Login</h1>
+<form id="passengerLoginForm">
+
+  <label for="username">Username:</label>
+  <input type="text" id="username" required><br>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" required><br>
+
+  <div class="button_container">
+    <button>Login</button>
+  </div>
+
+</form>
+<span class="error-message"></span>
+
+
+
+  <script>
+    document.getElementById('passengerLoginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.querySelector('.error-message');
+
+      fetch('http://localhost:3000/api/passenger-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json(); // Process the response if it's a successful login
+        } else {
+          throw new Error('Invalid credentials'); // Throw error to be caught in the catch block
+        }
+      })
+      .then(data => {
+        sessionStorage.setItem('token', data.token);
+        window.location.href = 'passenger-home.html';
+      })
+      .catch(error => {
+        console.error('Login failed', error);
+        errorMessage.textContent = 'Login failed: Invalid username or password'; // Update error message
+      });
+    });
+  </script>
+</body>
+</html>
