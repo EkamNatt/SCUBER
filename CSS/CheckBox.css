@@ -49,7 +49,7 @@
 
 /* When the checkbox is checked, add a blue background */
 .custom_checkbox input:checked ~ .checkmark {
-    background-color: #2196F3;
+    background-color: #F44336;
     scale: 1.25;
     transition-duration: 0.5s;
 }

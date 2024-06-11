@@ -35,7 +35,7 @@ form input {
 }
 
 button {
-    background-color:#2196F3;
+    background-color:#F44336;
     color: White;
     font-weight: bolder;
     margin-top: 5%;
@@ -47,7 +47,7 @@ button {
 }
 
 button:hover {
-    background-color:#2196F3;
+    background-color:#F44336;
     transition-duration: 0.5s;
     transform: scale(1.5);
     #animation: rainbow_pulse 10s infinite ease-in-out;

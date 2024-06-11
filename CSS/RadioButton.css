@@ -51,7 +51,7 @@
 
 /* When the radio button is checked, add a blue background */
 .custom_radiobutton input:checked ~ .checkmark {
-    background-color: #2196F3;
+    background-color: #F44336;
     scale: 125%;
     transition-duration: 0.5s;
 }
