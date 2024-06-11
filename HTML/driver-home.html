@@ -55,7 +55,7 @@
 
     .passenger-item {
       padding: 10px;
-      background-color: #636363;
+      background-color: #c2c2c2;
       border-radius: 4px;
       margin-bottom: 10px;
     }
@@ -63,6 +63,7 @@
 </head>
 <body>
   <h1>Driver Home</h1>
+
   <form id="priorityForm">
     <label for="priorities">Select Priorities:</label>
     <select id="priorities" multiple>
@@ -70,14 +71,20 @@
       <option value="gender">Gender</option>
       <option value="distance">Distance</option>
     </select>
+
     <button type="submit">Search Passengers</button>
   </form>
+
   <div id="passengerList"></div>
+
   <script>
     const token = sessionStorage.getItem('token');
+
     document.getElementById('priorityForm').addEventListener('submit', function(e) {
       e.preventDefault();
+
       const priorities = Array.from(document.getElementById('priorities').selectedOptions).map(option => option.value);
+
       fetch('http://localhost:3000/api/drivers/passengers', {
         method: 'POST',
         headers: {
@@ -86,27 +93,42 @@
         },
         body: JSON.stringify({ priorities })
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(passengers => {
         const passengerList = document.getElementById('passengerList');
         passengerList.innerHTML = '';
-        passengers.forEach(passengerData => {
-          const passengerItem = document.createElement('div');
-          passengerItem.classList.add('passenger-item');
-          const passengerInfo = `
-            <p>Name: ${passengerData.passenger.name}</p>
-            <p>Major: ${passengerData.passenger.major}</p>
-            <p>Time Matches: ${passengerData.timeMatches}</p>
-            <p>Distance: ${passengerData.distance.toFixed(2)} km</p>
-            <p>Similarity Score: ${passengerData.similarityScore.toFixed(2)}</p>
-            <p>Phone number: ${driverData.passanger.phoneNumber}</p> 
-          `;
-          passengerItem.innerHTML = passengerInfo;
-          passengerList.appendChild(passengerItem);
-        });
+
+        // Ensure that passengers data is correctly parsed
+        if (passengers && passengers.length) {
+          passengers.forEach(passengerData => {
+            const passengerItem = document.createElement('div');
+            passengerItem.classList.add('passenger-item');
+
+            const passengerInfo = `
+              <p>Name: ${passengerData.name}</p>
+              <p>Major: ${passengerData.major}</p>
+              <p>Distance: ${passengerData.distance}</p>
+              <p>Score: ${passengerData.score}</p>
+              <p>Music Score: ${passengerData.musicScore}</p>
+              <p>Phone number: ${passengerData.phoneNumber}</p>
+            `;
+
+            passengerItem.innerHTML = passengerInfo;
+            passengerList.appendChild(passengerItem);
+          });
+        } else {
+          // In case no passengers are returned or data format is incorrect
+          passengerList.innerHTML = '<p>No passengers found or an error occurred. Check the console for errors.</p>';
+        }
       })
       .catch(error => {
         console.error('Error fetching passengers:', error);
+        document.getElementById('passengerList').innerHTML = '<p>An error occurred. Check the console for details.</p>';
       });
     });
   </script>

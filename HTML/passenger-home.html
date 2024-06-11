@@ -55,7 +55,7 @@
 
     .driver-item {
       padding: 10px;
-      background-color: #636363;
+      background-color: #c2c2c2;
       border-radius: 4px;
       margin-bottom: 10px;
     }
@@ -93,30 +93,42 @@
         },
         body: JSON.stringify({ priorities })
       })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(drivers => {
         const driverList = document.getElementById('driverList');
         driverList.innerHTML = '';
 
-        drivers.forEach(driverData => {
-          const driverItem = document.createElement('div');
-          driverItem.classList.add('driver-item');
+        // Ensure that drivers data is correctly parsed
+        if (drivers && drivers.length) {
+          drivers.forEach(driverData => {
+            const driverItem = document.createElement('div');
+            driverItem.classList.add('driver-item');
 
-          const driverInfo = `
-            <p>Name: ${driverData.driver.name}</p>
-            <p>Major: ${driverData.driver.major}</p>
-            <p>Time Matches: ${driverData.timeMatches}</p>
-            <p>Distance: ${driverData.distance.toFixed(2)} km</p>
-            <p>Similarity Score: ${driverData.similarityScore.toFixed(2)}</p>
-            <p>Phone number: ${driverData.driver.phoneNumber}</p> 
-          `;
+            const driverInfo = `
+              <p>Name: ${driverData.name}</p>
+              <p>Major: ${driverData.major}</p>
+              <p>Distance: ${driverData.distance}</p>
+              <p>Score: ${driverData.score}</p>
+              <p>Music Score: ${driverData.musicScore}</p>
+              <p>Phone number: ${driverData.phoneNumber}</p>
+            `;
 
-          driverItem.innerHTML = driverInfo;
-          driverList.appendChild(driverItem);
-        });
+            driverItem.innerHTML = driverInfo;
+            driverList.appendChild(driverItem);
+          });
+        } else {
+          // In case no drivers are returned or data format is incorrect
+          driverList.innerHTML = '<p>No drivers found or an error occurred. Check the console for errors.</p>';
+        }
       })
       .catch(error => {
         console.error('Error fetching drivers:', error);
+        document.getElementById('driverList').innerHTML = '<p>An error occurred. Check the console for details.</p>';
       });
     });
   </script>

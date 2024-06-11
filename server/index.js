@@ -182,6 +182,21 @@ function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
+// Function to calculate music taste matches
+function calculateMusicMatch(passengerMusicTastes, driverMusicTastes) {
+  if (!passengerMusicTastes.length || !driverMusicTastes.length) {
+    return 0; // Return 0 if either party has no music tastes defined
+  }
+
+  const matches = passengerMusicTastes.filter(taste => driverMusicTastes.includes(taste)).length;
+  return matches / passengerMusicTastes.length; // Proportion of matches
+}
+
+// Function to normalize score to 1-10 range
+function normalizeScore(score, maxScore) {
+  return 1 + 9 * (score / maxScore); // Normalize to 1-10 range
+}
+
 app.post('/api/passengers/drivers', verifyToken, (req, res) => {
   const { priorities } = req.body;
 
@@ -197,64 +212,46 @@ app.post('/api/passengers/drivers', verifyToken, (req, res) => {
 
       Driver.findAll()
         .then(drivers => {
+          const maxScore = priorities.length + 1; // Maximum possible score (each priority + time matches)
           const sortedDrivers = drivers.map(driver => {
             let score = 0;
-            let timeMatches = 0;
-
-            // Calculate time matches
-            const passengerSchedule = [
-              passenger.scheduleMonday,
-              passenger.scheduleTuesday,
-              passenger.scheduleWednesday,
-              passenger.scheduleThursday,
-              passenger.scheduleFriday
-            ];
-            const driverSchedule = [
-              driver.scheduleMonday,
-              driver.scheduleTuesday,
-              driver.scheduleWednesday,
-              driver.scheduleThursday,
-              driver.scheduleFriday
-            ];
-            timeMatches = passengerSchedule.filter((time, index) => time === driverSchedule[index]).length;
+            let musicScore = 0; // Initialize music score
+            const distance = calculateDistance(passenger.homeLatitude, passenger.homeLongitude, driver.homeLatitude, driver.homeLongitude);
 
             // Calculate scores based on priorities
             priorities.forEach(priority => {
               if (priority === 'musicTastes') {
-                const musicMatch = passenger.musicTastes.some(genre => driver.musicTastes.includes(genre));
-                score += musicMatch ? 1 : 0;
-              } else if (priority === 'gender') {
-                score += passenger.genderPreference === 'All' || passenger.gender === driver.gender ? 1 : 0;
-              } else if (priority === 'distance') {
-                const distance = calculateDistance(passenger.homeLatitude, passenger.homeLongitude, driver.homeLatitude, driver.homeLongitude);
-                score += 1 / (distance + 1); // Inverse of distance as score
+                musicScore = calculateMusicMatch(passenger.musicTastes, driver.musicTastes);
+                score += musicScore; // Add proportional music match score
+              }
+              if (priority === 'gender' && (passenger.genderPreference === 'All' || passenger.gender === driver.gender)) {
+                score += 1;  // Increase score if gender preference matches
+              }
+              if (priority === 'distance') {
+                score += 1 / (distance + 1); // Inverse of distance as score to prioritize closer drivers
               }
             });
 
-            const totalPriorities = priorities.length + 1; // +1 for time matches
-            const similarityScore = (score + timeMatches) / totalPriorities;
+            const normalizedScore = normalizeScore(score, maxScore); // Normalize the score to 1-10
 
             return {
               driver,
-              score,
-              timeMatches,
-              distance: calculateDistance(passenger.homeLatitude, passenger.homeLongitude, driver.homeLatitude, driver.homeLongitude),
-              similarityScore
+              score: normalizedScore,
+              musicScore, // Include music score separately for debugging or detailed responses
+              distance,
             };
           });
 
-          // Sort drivers based on time matches first, then distance, then similarity score
-          sortedDrivers.sort((a, b) => {
-            if (b.timeMatches !== a.timeMatches) {
-              return b.timeMatches - a.timeMatches;
-            } else if (a.distance !== b.distance) {
-              return a.distance - b.distance;
-            } else {
-              return b.similarityScore - a.similarityScore;
-            }
-          });
+          sortedDrivers.sort((a, b) => b.score - a.score); // Sort by score descending
 
-          res.json(sortedDrivers);
+          res.json(sortedDrivers.map(driver => ({
+            name: driver.driver.name,
+            major: driver.driver.major,
+            distance: driver.distance.toFixed(2) + ' km',
+            score: driver.score.toFixed(2),
+            musicScore: driver.musicScore.toFixed(2), // Display music score
+            phoneNumber: driver.driver.phoneNumber,
+          })));
         })
         .catch(error => {
           console.error('Error fetching drivers:', error);
@@ -266,6 +263,22 @@ app.post('/api/passengers/drivers', verifyToken, (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     });
 });
+
+
+// Function to calculate music taste matches
+function calculateMusicMatch(driverMusicTastes, passengerMusicTastes) {
+  if (!driverMusicTastes.length || !passengerMusicTastes.length) {
+    return 0; // Return 0 if either party has no music tastes defined
+  }
+
+  const matches = driverMusicTastes.filter(taste => passengerMusicTastes.includes(taste)).length;
+  return matches / driverMusicTastes.length; // Proportion of matches
+}
+
+// Function to normalize score to 1-10 range
+function normalizeScore(score, maxScore) {
+  return 1 + 9 * (score / maxScore); // Normalize to 1-10 range
+}
 
 app.post('/api/drivers/passengers', verifyToken, (req, res) => {
   const { priorities } = req.body;
@@ -282,64 +295,46 @@ app.post('/api/drivers/passengers', verifyToken, (req, res) => {
 
       Passenger.findAll()
         .then(passengers => {
+          const maxScore = priorities.length + 1; // Maximum possible score (each priority + time matches)
           const sortedPassengers = passengers.map(passenger => {
             let score = 0;
-            let timeMatches = 0;
-
-            // Calculate time matches
-            const passengerSchedule = [
-              passenger.scheduleMonday,
-              passenger.scheduleTuesday,
-              passenger.scheduleWednesday,
-              passenger.scheduleThursday,
-              passenger.scheduleFriday
-            ];
-            const driverSchedule = [
-              driver.scheduleMonday,
-              driver.scheduleTuesday,
-              driver.scheduleWednesday,
-              driver.scheduleThursday,
-              driver.scheduleFriday
-            ];
-            timeMatches = passengerSchedule.filter((time, index) => time === driverSchedule[index]).length;
+            let musicScore = 0; // Initialize music score
+            const distance = calculateDistance(driver.homeLatitude, driver.homeLongitude, passenger.homeLatitude, passenger.homeLongitude);
 
             // Calculate scores based on priorities
             priorities.forEach(priority => {
               if (priority === 'musicTastes') {
-                const musicMatch = driver.musicTastes.some(genre => passenger.musicTastes.includes(genre));
-                score += musicMatch ? 1 : 0;
-              } else if (priority === 'gender') {
-                score += driver.genderPreference === 'All' || driver.gender === passenger.gender ? 1 : 0;
-              } else if (priority === 'distance') {
-                const distance = calculateDistance(driver.homeLatitude, driver.homeLongitude, passenger.homeLatitude, passenger.homeLongitude);
-                score += 1 / (distance + 1); // Inverse of distance as score
+                musicScore = calculateMusicMatch(driver.musicTastes, passenger.musicTastes);
+                score += musicScore; // Add proportional music match score
+              }
+              if (priority === 'gender' && (driver.genderPreference === 'All' || passenger.gender === driver.gender)) {
+                score += 1;  // Increase score if gender preference matches
+              }
+              if (priority === 'distance') {
+                score += 1 / (distance + 1); // Inverse of distance as score to prioritize closer passengers
               }
             });
 
-            const totalPriorities = priorities.length + 1; // +1 for time matches
-            const similarityScore = (score + timeMatches) / totalPriorities;
+            const normalizedScore = normalizeScore(score, maxScore); // Normalize the score to 1-10
 
             return {
               passenger,
-              score,
-              timeMatches,
-              distance: calculateDistance(driver.homeLatitude, driver.homeLongitude, passenger.homeLatitude, passenger.homeLongitude),
-              similarityScore
+              score: normalizedScore,
+              musicScore, // Include music score separately for debugging or detailed responses
+              distance,
             };
           });
 
-          // Sort passengers based on time matches first, then distance, then similarity score
-          sortedPassengers.sort((a, b) => {
-            if (b.timeMatches !== a.timeMatches) {
-              return b.timeMatches - a.timeMatches;
-            } else if (a.distance !== b.distance) {
-              return a.distance - b.distance;
-            } else {
-              return b.similarityScore - a.similarityScore;
-            }
-          });
+          sortedPassengers.sort((a, b) => b.score - a.score); // Sort by score descending
 
-          res.json(sortedPassengers);
+          res.json(sortedPassengers.map(passenger => ({
+            name: passenger.passenger.name,
+            major: passenger.passenger.major,
+            distance: passenger.distance.toFixed(2) + ' km',
+            score: passenger.score.toFixed(2),
+            musicScore: passenger.musicScore.toFixed(2), // Display music score
+            phoneNumber: passenger.passenger.phoneNumber,
+          })));
         })
         .catch(error => {
           console.error('Error fetching passengers:', error);
@@ -351,6 +346,7 @@ app.post('/api/drivers/passengers', verifyToken, (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     });
 });
+
 
 app.post('/api/driver-login', (req, res) => {
   const { username, password } = req.body;
