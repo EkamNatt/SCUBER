@@ -4,7 +4,7 @@ const axios = require('axios');
 const baseURL = 'http://localhost:3000/api';
 
 // Passenger data
-const passengerData = {
+/*const passengerData = {
   name: 'Amit Patel',
   username: 'amitpatel',
   password: 'password123',
@@ -26,7 +26,7 @@ const passengerData = {
   genderPreference: 'All',
   phoneNumber: '678-901-2345'
 };
-
+*/
 // Function to create a passenger in the database
 async function createPassenger(passengerData) {
   try {

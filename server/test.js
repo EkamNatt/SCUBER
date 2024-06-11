@@ -4,7 +4,7 @@ const axios = require('axios');
 const baseURL = 'http://localhost:3000/api';
 
 // Define an array of driver data to be created
-const drivers = [
+/*const drivers = [
   {
     name: 'Raj Sharma',
     username: 'rajsharma',
@@ -116,7 +116,7 @@ const drivers = [
     phoneNumber: '567-890-1234'
   }
 ];
-
+*/
 // Function to create a driver in the database
 async function createDriver(driverData) {
   try {
